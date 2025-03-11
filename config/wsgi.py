@@ -1,6 +1,12 @@
 import os
+import sys
 from django.core.wsgi import get_wsgi_application
 from decouple import config
+
+
+# its required if u want to placed all installed applications inside apps/ folder
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../apps')))
+
 
 # Set the default settings module using an environment variable,
 # defaulting to development settings.

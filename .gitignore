@@ -18,8 +18,12 @@ debug.log
 db.sqlite3
 media/
 staticfiles/
-migrations/*  # Ignore migrations except __init__.py
-!migrations/__init__.py
+# Ignore all migration files
+**/migrations/*.py
+
+# But keep __init__.py files in migrations
+!**/migrations/__init__.py
+
 
 # 🛑 IDE & Editor Files
 .vscode/
