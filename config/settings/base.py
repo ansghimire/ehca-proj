@@ -18,9 +18,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Third-party apps
     'rest_framework',  # Django REST framework
+    'rest_framework_simplejwt',  # JWT auth for DRF
     # Local apps
     'apps.core',
-    'apps.account'
+    'apps.account',
+    'apps.shifts',
 ]
 
 MIDDLEWARE = [
@@ -82,12 +84,7 @@ MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'account.UserAccount' 
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv("EMAIL_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_PASS")
-EMAIL_USE_TLS = True
+
 
 
 
@@ -133,4 +130,12 @@ LOGGING = {
             'propagate': True,
         },
     },
+}
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }

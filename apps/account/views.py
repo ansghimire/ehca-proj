@@ -53,15 +53,28 @@ class SignupVerifyAPIView(APIView):
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
+from rest_framework import status
+from rest_framework.response import Response
 
 class BlacklistRefreshView(APIView):
     def post(self, request):
+        refresh_token = request.data.get("refresh")
+        if not refresh_token:
+            return Response({"error": "Refresh token is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
         try:
-            token = RefreshToken(request.data.get('refresh'))
+            token = RefreshToken(refresh_token)
+
+            # ✅ Make sure token is a valid RefreshToken before blacklisting
+            if hasattr(token, "blacklist"):
+                token.blacklist()
+                return Response({"message": "Token blacklisted successfully"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "Blacklisting not available"}, status=status.HTTP_400_BAD_REQUEST)
+
         except Exception as e:
-            return error_response(message=str(e))
-        token.blacklist()
-        return success_response(message="User access token has been blacklisted successsfully")
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class ChangePasswordAPIView(APIView):
@@ -74,18 +87,19 @@ class ChangePasswordAPIView(APIView):
 
         user = request.user
 
+
         if not user.check_password(current_password):
-             return error_response(error= "Incorrect current password.")
+             return error_response(errors= "Incorrect current password.")
         
         try:   
             validate_password(password)   
             validate_password(re_password)
         except ValidationError as e:
-            return error_response(error = "The password must contain at least 8 characters and should not be common")
+            return error_response(errors = "The password must contain at least 8 characters and should not be common")
 
      
         if password != re_password:
-            return error_response(error = "Password do not match")
+            return error_response(errors = "Password do not match")
 
         user = request.user
         user.set_password(password)

@@ -19,7 +19,8 @@ from api.routers import router
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/core/', include('apps.core.urls'))
+    path('api/core/', include('apps.core.urls')),
+    path('api/account/', include('apps.account.urls')),
 ]
 
 
