@@ -17,6 +17,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ('email', 'first_name', 'last_name', 'password', 'otp')
     
     def create(self, validated_data):
+
+        request = self.context.get('request')
        
         key = GenerateKey.return_value()
         hashed_otp = hashlib.sha256(key.encode('utf-8')).hexdigest()
@@ -34,7 +36,8 @@ class RegisterSerializer(serializers.ModelSerializer):
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
             otp=hashed_otp,
-            is_nurse = True,
+            is_client =   True if request.data.get('is_client') else False,
+            is_staff =   True if request.data.get('is_nurse') else False,
             password = password
         )
         user.is_active = False

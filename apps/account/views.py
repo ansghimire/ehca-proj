@@ -16,7 +16,7 @@ User = get_user_model()
 
 class RegisterAPIView(APIView):                                                     
     def post(self, request, *args, **kwargs):
-        serializer = RegisterSerializer(data = request.data)
+        serializer = RegisterSerializer(data = request.data, context={'request': request})
         
         if serializer.is_valid():
             user, otp = serializer.save()
@@ -40,6 +40,7 @@ class SignupVerifyAPIView(APIView):
                 return error_response(message="Invalid Otp")
             else:
                 user.is_active = True
+                user.is_verified = True
                 user.otp = None
                 user.save()
                 thread = threading.Thread(target=send_activation_success_email, args=(user.email,))

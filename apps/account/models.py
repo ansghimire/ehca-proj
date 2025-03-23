@@ -46,7 +46,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(max_length=255)
     user_status = models.CharField(_('Status'), choices=STATUS_CHOICES, default='pending', blank=True, max_length=20)
     is_active = models.BooleanField(default=False)
-    is_nurse = models.BooleanField(default=False)
+    is_client = models.BooleanField(default=False)
     is_verified = models.BooleanField(_('is_verified'), default=False)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(_('admin'), default=False)
