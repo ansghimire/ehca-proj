@@ -11,6 +11,9 @@ DATABASES = {
 }
 
 # Development-specific email backend and logging can go here.
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
 
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
